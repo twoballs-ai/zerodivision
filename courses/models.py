@@ -4,6 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from .fields import OrderField
 
+
 # Create your models here.
 
 
@@ -53,12 +54,7 @@ class Course(models.Model):
 class Module(models.Model):
     course = models.ForeignKey(Course,
                                related_name='modules',
-                               on_delete=models.CASCADE,
-                               limit_choices_to={'model__in': (
-                                   'text',
-                                   'video',
-                                   'image',
-                                   'file')})
+                               on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     order = OrderField(blank=True, for_fields=['course'])
@@ -75,7 +71,12 @@ class Content(models.Model):
                                related_name='contents',
                                on_delete=models.CASCADE)
     content_type = models.ForeignKey(ContentType,
-                                     on_delete=models.CASCADE)
+                                     on_delete=models.CASCADE,
+                                     limit_choices_to={'model__in': (
+                                         'text',
+                                         'video',
+                                         'image',
+                                         'file')})
     object_id = models.PositiveIntegerField()
     item = GenericForeignKey('content_type', 'object_id')
     order = OrderField(blank=True, for_fields=['module'])

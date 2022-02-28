@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
 
+
 # Это класс поля OrderField. Он наследуется от PositiveIntegerField, который
 # определен в Django. Конструктор принимает необязательный параметр for_
 # fields, чтобы определить поле родительского объекта, относительно которого
@@ -34,20 +35,20 @@ class OrderField(models.PositiveIntegerField):
 
     def pre_save(self, model_instance, add):
         if getattr(model_instance, self.attname) is None:
-#значение пусто
+            # значение пусто
             try:
                 qs = self.model.objects.all()
                 if self.for_fields:
-# Фильтруем объекты с такими же значениями полей,
-# перечисленных в "for_fields".
-                    query = {field: getattr(model_instance,field)\
+                    # Фильтруем объекты с такими же значениями полей,
+                    # перечисленных в "for_fields".
+                    query = {field: getattr(model_instance, field) \
                              for field in self.for_fields}
-                    qs =qs.filter(**query)
+                    qs = qs.filter(**query)
                 last_item = qs.latest(self.attname)
-                value = last_item.order+1
+                value = last_item.order + 1
             except ObjectDoesNotExist:
                 value = 0
-            setattr(model_instance,self.attname, value)
+            setattr(model_instance, self.attname, value)
             return value
         else:
             return super(OrderField, self).pre_save(model_instance, add)
