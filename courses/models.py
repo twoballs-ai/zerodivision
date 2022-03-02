@@ -72,11 +72,10 @@ class Content(models.Model):
                                on_delete=models.CASCADE)
     content_type = models.ForeignKey(ContentType,
                                      on_delete=models.CASCADE,
-                                     limit_choices_to={'model__in': (
-                                         'text',
-                                         'video',
-                                         'image',
-                                         'file')})
+                                     limit_choices_to={'model__in': ('text',
+                                                                     'video',
+                                                                     'image',
+                                                                     'file')})
     object_id = models.PositiveIntegerField()
     item = GenericForeignKey('content_type', 'object_id')
     order = OrderField(blank=True, for_fields=['module'])
