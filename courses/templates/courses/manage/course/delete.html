@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
-{% block title %}Delete course{% endblock %}
+{% block title %}Удалить ваш курс{% endblock %}
 
 {% block content %}
-  <h1>Delete course "{{ object.title }}"</h1>
+  <h1>Удалить курс: "{{ object.title }}"</h1>
 
   <div class="module">
     <form action="" method="post">
       {% csrf_token %}
-      <p>Are you sure you want to delete "{{ object }}"?</p>
-      <input type="submit" class = "button" value="Confirm">
+      <p>Вы точно уверены что хотите удалить курс: "{{ object }}"?</p>
+      <input type="submit" class = "button" value="Подтвердить">
     </form>
   </div>
 {% endblock %}
