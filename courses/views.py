@@ -13,7 +13,7 @@ from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
 from django.db.models import Count
 from .models import Subject, Course, Module, Content
 from .forms import ModuleFormSet
-#from students.forms import CourseEnrollForm
+from students.forms import CourseEnrollForm
 from django.core.cache import cache
 
 # Create your views here.
@@ -257,9 +257,9 @@ class CourseDetailView(DetailView):
     model = Course
     template_name = 'courses/course/detail.html'
 
-    # def get_context_data(self, **kwargs):
-    #     context = super(CourseDetailView,
-    #                     self).get_context_data(**kwargs)
-    #     context['enroll_form'] = CourseEnrollForm(
-    #                                initial={'course':self.object})
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super(CourseDetailView,
+                        self).get_context_data(**kwargs)
+        context['enroll_form'] = CourseEnrollForm(
+                                   initial={'course':self.object})
+        return context
