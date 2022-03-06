@@ -5,14 +5,21 @@
     <meta charset="utf-8" />
     <title>{% block title %}Zerodivision{% endblock %}</title>
     <link href="{% static "css/base.css" %}" rel="stylesheet">
+    <link href="{% static "css/footer.css" %}" rel="stylesheet">
 </head>
 <body>
     <div id="header">
         <a href="/" class="logo">Zerodivision</a>
+        <a href="{% url "course_list" %}" class="global">Все курсы</a>
+        <a href="{% url "students:student_course_list" %}" class="global">Обучение</a>
+        {% if request.user.is_authenticated %}
+        <a href="{% url "courses:manage_course_list" %}" class="global">Создание курсов</a>
+        {% endif %}
         <ul class="menu">
             {% if request.user.is_authenticated %}
                 <li><a href="{% url "logout" %}">Выйти</a></li>
             {% else %}
+                <li><a href="{% url 'signup' %}">Зарегестрироваться</a></li>
                 <li><a href="{% url "login" %}">Войти</a></li>
             {% endif %}
         </ul>
@@ -30,4 +37,5 @@
         });
     </script>
 </body>
+{% include 'site/footer.html' %}
 </html>

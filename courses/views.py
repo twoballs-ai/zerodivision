@@ -2,11 +2,11 @@ from django.urls import reverse_lazy
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, \
-                                      DeleteView
+    DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, \
-                                       PermissionRequiredMixin
-from django.shortcuts import redirect, get_object_or_404
-from django.views.generic.base import TemplateResponseMixin, View
+    PermissionRequiredMixin
+from django.shortcuts import redirect, get_object_or_404, render
+from django.views.generic.base import TemplateResponseMixin, View, TemplateView
 from django.forms.models import modelform_factory
 from django.apps import apps
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
@@ -15,6 +15,14 @@ from .models import Subject, Course, Module, Content
 from .forms import ModuleFormSet
 from students.forms import CourseEnrollForm
 from django.core.cache import cache
+from django.contrib.auth.forms import UserCreationForm
+
+
+class SignUp(CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy("login")
+    template_name = "registration/registration.html"
+
 
 # Create your views here.
 # Мы определим обработчики для создания, редактирования и удаления курсов,
@@ -206,8 +214,8 @@ class ModuleContentListView(TemplateResponseMixin, View):
         return self.render_to_response({'module': module})
 
 
-#Нам нужен обработчик, который будет получать новый порядок модулей
-#курса в формате JSON.
+# Нам нужен обработчик, который будет получать новый порядок модулей
+# курса в формате JSON.
 class ModuleOrderView(CsrfExemptMixin, JsonRequestResponseMixin, View):
     def post(self, request):
         for id, order in self.request_json.items():
@@ -232,10 +240,9 @@ class CourseListView(TemplateResponseMixin, View):
         subjects = cache.get('all_subjects')
         if not subjects:
             subjects = Subject.objects.annotate(
-                           total_courses=Count('courses'))
+                total_courses=Count('courses'))
             cache.set('all_subjects', subjects)
-        all_courses = Course.objects.annotate(
-                                   total_modules=Count('modules'))
+        all_courses = Course.objects.annotate(total_modules=Count('modules'))
         if subject:
             subject = get_object_or_404(Subject, slug=subject)
             key = 'subject_{}_courses'.format(subject.id)
@@ -261,5 +268,9 @@ class CourseDetailView(DetailView):
         context = super(CourseDetailView,
                         self).get_context_data(**kwargs)
         context['enroll_form'] = CourseEnrollForm(
-                                   initial={'course':self.object})
+            initial={'course': self.object})
         return context
+
+
+class AboutView(TemplateView):
+    template_name = 'service/about.html'

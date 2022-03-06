@@ -6,10 +6,16 @@ from .fields import OrderField
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 
-# Create your models here.
 
+#пока не уверен как лучше реализовать классы ученика
+# и учителя вместе или отдельно
+class Teacher(models.Model):
+    full_name=models.CharField(max_length=100)
+    email=models.CharField(max_length=100)
+    password=models.CharField(max_length=100)
+    qualification=models.CharField(max_length=100)
+    phone_nmbr=models.CharField(max_length=100)
 
-# создание темы курсов
 class Subject(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
@@ -106,6 +112,7 @@ class ItemBase(models.Model):
     def render(self):
         return render_to_string('courses/content/{}.html'.format(
             self._meta.model_name), {'item': self})
+
 
 # добавление абстрактных моделей наследования.
 class Text(ItemBase):

@@ -15,5 +15,7 @@
             {% csrf_token %}
             <p><input type="submit" value="Create my account"></p>
         </form>
+    <a href="{% url 'login' %}">Back to login</a>
+    <a href="{% url 'course_list' %}">Back to Home</a>
     </div>
 {% endblock %}

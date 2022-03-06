@@ -1,6 +1,7 @@
 @import url(http://fonts.googleapis.com/css?family=Roboto:500,300,400);
 
 body {
+    width:100%;
     margin:0;
     font-family:'Roboto', sans-serif;
     font-weight:400;
@@ -10,6 +11,14 @@ body {
 a {
     color:#3fad37;
     text-decoration:none;
+}
+
+#header a.global{
+    margin-left: 20px; /* Отступ слева */
+    margin-top: 5%;
+    margin-right: 0%;
+    padding: 10px; /* Поля вокруг текста */
+    color:#efefef;
 }
 
 ul {
